@@ -1005,74 +1005,70 @@
         <div class="insight-box">
             <ol>
                 <li><strong>Market Cyclicality:</strong> The DC housing market demonstrates clear cyclical behavior with identifiable boom-bust-recovery patterns over 24 years.</li>
-                <li><strong>Economic Drivers:</strong> Housing prices show strongest correlations with CPI, median household income, and population growth.</li>
-                <li><strong>Temporal Relationships:</strong> Unemployment rate changes lead housing price movements by approximately 10 months, while housing prices impact interest rates with a lag of about 2 years.</li>
-                <li><strong>Seasonal Patterns:</strong> DC housing prices follow consistent seasonal patterns with summer peaks and winter troughs.</li>
-                <li><strong>Resilience:</strong> The DC market demonstrates greater resilience during economic downturns compared to national averages.</li>
-                <li><strong>Model Performance:</strong> The ARIMAX(2,1,1) model with carefully selected economic indicators provides the best predictive performance, with MAPE of 2.3% and direction accuracy of 85%.</li>
-                <li><strong>Feature Importance:</strong> Lagged unemployment rate (10 months), current CPI, and median household income are the most influential predictors of housing price movements.</li>
-                <li><strong>Affordability Challenges:</strong> Current combination of elevated prices and higher mortgage rates has created significant affordability challenges despite income growth.</li>
+                <li><strong>Economic Drivers:</strong> Housing prices show strongest correlations with CPI (r=0.87), median household income (r=0.85), and population growth (r=0.64).</li>
+                <li><strong>Temporal Relationships:</strong> Unemployment rate changes lead housing price movements by approximately 10 months, while housing prices impact interest rates with a lag of about 24 months.</li>
+                <li><strong>Seasonal Patterns:</strong> DC housing prices peak in June with an average increase of $843 above trend, and reach their lowest point in January with an average decrease of $801 below trend.</li>
+                <li><strong>Resilience:</strong> The DC market demonstrates greater resilience during economic downturns compared to national averages, with a smaller decline during the 2008 crisis (-25.8% vs -33% nationally).</li>
+                <li><strong>Model Performance:</strong> Linear Regression with comprehensive feature engineering outperformed all other models, achieving RMSE of $9,773, MAPE of 1.62% and directional accuracy of 85.71%.</li>
+                <li><strong>Feature Importance:</strong> Price-to-income ratio, monthly payment calculations, CPI, unemployment rate with 6-10 month lags, and household income emerged as the top predictive features.</li>
+                <li><strong>Affordability Challenges:</strong> Current payment-to-income ratio of 32.55% (above the 30% affordability threshold) indicates significant affordability pressure despite income growth.</li>
             </ol>
         </div>
-
         <h3>Implications for Stakeholders</h3>
         <h4>For Homebuyers:</h4>
         <ul>
-            <li>Monitor unemployment trends as a leading indicator of future housing price movements</li>
-            <li>Consider seasonal timing of purchases (winter months typically offer better value)</li>
-            <li>Factor in the cyclical nature of the market when making long-term investment decisions</li>
-            <li>Evaluate mortgage rate trends and their impact on affordability</li>
-            <li>Pay attention to threshold effects where mortgage rates above 5% have accelerating negative impacts on prices</li>
+            <li>Track the 10-month lagged unemployment rate (currently at 4.0%) as it historically leads housing price changes, with each 1% increase in unemployment predicting approximately a 1.8% decrease in housing prices 10 months later</li>
+            <li>Target January purchases when prices are typically $801 below annual trend, avoiding the June peak when prices are $843 above trend</li>
+            <li>Calculate your personal payment-to-income ratio and aim to keep it below 30%, as this metric showed high predictive importance in the model</li>
+            <li>Monitor monthly CPI releases as they have the strongest contemporaneous correlation (r=0.87) with housing prices</li>
+            <li>Watch for mortgage rates crossing the 6% threshold, which historically accelerates market cooling (as seen in the "Rate Hike Era" period with just 3.5% annual appreciation)</li>
         </ul>
-
         <h4>For Sellers:</h4>
         <ul>
-            <li>Optimize timing of sales to align with seasonal peaks (typically summer months)</li>
-            <li>Consider economic indicators that suggest market peaking or cooling</li>
-            <li>Monitor inventory levels and days-on-market as indicators of market strength</li>
-            <li>Use model direction accuracy insights (85-86% for top models) to inform timing decisions</li>
+            <li>Time listings for May-June when seasonal effects push prices $800+ above the annual trend</li>
+            <li>Track 3-month moving averages of CPI (r=0.85 with prices) as a near-term indicator of price strength</li>
+            <li>Monitor the price-to-income ratio (currently at 5.02) - historically when this ratio exceeds 5.5 in DC, market corrections become more likely</li>
+            <li>Consider selling when unemployment rate begins rising but before the 10-month lag impact materializes in housing prices</li>
+            <li>Use the 6-month moving average of mortgage rates to gauge market momentum, as this feature showed strong predictive power</li>
         </ul>
-
         <h4>For Policymakers:</h4>
         <ul>
-            <li>Address income growth and population trends to improve long-term affordability</li>
-            <li>Recognize the lagged effects of interest rate policies on housing markets</li>
-            <li>Consider seasonal patterns when interpreting monthly housing data</li>
-            <li>Monitor affordability metrics as indicators of potential market stress</li>
-            <li>Utilize the ARIMAX model coefficients to quantify policy impact ($4,500 price decrease per 1% unemployment increase)</li>
+            <li>Focus on median household income growth as it showed an almost 1:1 relationship with housing prices in the linear model (coefficient of 4.34)</li>
+            <li>Recognize that interest rate changes take approximately 24 months to fully impact housing prices based on lagged correlation analysis</li>
+            <li>Track the payment-to-income ratio (currently 32.55%) as it approaches stress levels (>35%) that historically precede market corrections</li>
+            <li>Monitor real mortgage rates (nominal rate minus inflation) which showed significant predictive power in the model</li>
+            <li>Pay attention to the 6-month moving average of unemployment rate which captures medium-term economic health that affects housing demand</li>
         </ul>
         
         <h4>For Researchers:</h4>
         <ul>
-            <li>Use hybrid modeling approaches that combine time series techniques with external economic variables</li>
-            <li>Account for both linear and non-linear relationships, especially threshold effects</li>
-            <li>Incorporate regime-switching capabilities to handle structural breaks in time series data</li>
-            <li>Consider lagged variables (especially 8-12 months) to capture leading indicators</li>
+            <li>Focus on unemployment rate lags of 6-10 months, CPI 3-month moving averages, and 12-month lagged interest rates, which all showed strong predictive power</li>
+            <li>Develop derived affordability metrics like payment-to-income ratio and price-to-income ratio which outperformed raw price indicators</li>
+            <li>Use cyclical features like month_sin and month_cos transforms to properly capture seasonal effects</li>
+            <li>Include interaction terms like interest_unemployment (coefficient: 2.46) and mortgage_income (coefficient: -0.81) which captured important relationship dynamics</li>
+            <li>Implement regularization techniques like Lasso to address the feature dimensionality issue (125 features, 225 observations)</li>
         </ul>
-
         <h3>Limitations of the Analysis</h3>
         <ul>
-            <li><strong>Data Granularity:</strong> Lack of neighborhood-level data may mask important submarket trends</li>
-            <li><strong>External Factors:</strong> Some influential factors (regulatory changes, zoning policies) are not fully captured in the dataset</li>
-            <li><strong>Interpolation Effects:</strong> Annual-to-monthly conversion of some variables creates smoothed series that may not capture short-term fluctuations</li>
-            <li><strong>Changing Relationships:</strong> Correlations between variables may not remain stable over time or during extreme market conditions</li>
-            <li><strong>Model Limitations:</strong> Even the best models (ARIMAX, Ensemble) have limitations during market disruptions and structural shifts</li>
-            <li><strong>Non-linear Complexities:</strong> Some non-linear relationships may be oversimplified in the ARIMAX framework</li>
+            <li><strong>Data Granularity:</strong> Lack of neighborhood-level data masks significant price variation within DC (e.g., Georgetown vs. Anacostia)</li>
+            <li><strong>Feature Dimensionality:</strong> The high feature-to-observation ratio (125:225) creates overfitting risks, evidenced by the 0.32-point R² drop from Linear Regression (0.95) to Lasso (0.63)</li>
+            <li><strong>Multicollinearity:</strong> High correlation between CPI, median income, and population (all r>0.6) makes individual coefficient interpretation challenging</li>
+            <li><strong>Regime Changes:</strong> The model may not adequately capture structural breaks like the 2008 crisis or COVID-19 pandemic where relationships changed dramatically</li>
+            <li><strong>Supply-Side Factors:</strong> Limited data on housing inventory, construction costs, and zoning restrictions omits critical supply-side dynamics</li>
+            <li><strong>Interest Rate Environment:</strong> Most of the training data (2001-2019) represents a declining interest rate environment, potentially limiting model generalizability to the current rising rate regime</li>
         </ul>
-
         <h3>Recommendations for Future Research</h3>
         <ul>
-            <li>Incorporate neighborhood-level analysis to understand submarket dynamics</li>
-            <li>Explore the impact of demographic shifts on housing preferences and prices</li>
-            <li>Analyze the relationship between housing prices and commercial real estate trends</li>
-            <li>Investigate the impact of policy changes (zoning, tax incentives) on housing supply and prices</li>
-            <li>Examine the changing relationship between urban and suburban housing markets in the post-pandemic era</li>
-            <li>Develop advanced neural network architectures capable of capturing complex non-linear relationships</li>
-            <li>Experiment with transfer learning approaches to leverage insights from similar housing markets</li>
-            <li>Explore Bayesian modeling approaches that can incorporate uncertainty quantification</li>
+            <li>Implement recursive feature elimination to identify the optimal subset of predictors from the 125 engineered features</li>
+            <li>Develop a hybrid model combining an ARIMA component for baseline price trends with a linear component for economic factors</li>
+            <li>Incorporate housing supply metrics like monthly inventory, new construction permits, and average days-on-market</li>
+            <li>Create separate models for different price segments (entry-level, mid-market, luxury) to capture varying dynamics</li>
+            <li>Explore threshold regression to identify critical values where relationships change (e.g., the specific mortgage rate where price sensitivity accelerates)</li>
+            <li>Implement rolling-window models to track how feature importance evolves over time (particularly before and after the 2008 crisis)</li>
+            <li>Investigate the varying impacts of mortgage rates across different buyer segments (first-time, move-up, investor)</li>
+            <li>Incorporate migration data to better quantify population shifts affecting DC's housing demand</li>
         </ul>
     </div>
-
     <div class="section">
         <h2>Contact Information</h2>
         <ul>
