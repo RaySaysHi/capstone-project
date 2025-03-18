@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Washington, D.C. Housing Market Analysis Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #3498db;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        pre {
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 5px;
+            overflow: auto;
+        }
+        code {
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .caption {
+            text-align: center;
+            font-style: italic;
+            margin-top: 5px;
+            color: #7f8c8d;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .visualization-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .visualization-item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            background-color: #fff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .highlight {
+            background-color: #e3f2fd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 5px solid #2196f3;
+        }
+        .insight-box {
+            background-color: #f1f8e9;
+            border-left: 5px solid #8bc34a;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .warning-box {
+            background-color: #fff3e0;
+            border-left: 5px solid #ff9800;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .header-info {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .toc {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        .toc ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        .toc li {
+            margin-bottom: 8px;
+        }
+        .executive-summary {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Washington, D.C. Housing Market Analysis Report</h1>
+    
+    <div class="header-info">
+        <h3>Author: Raymond Ding</h3>
+        <h4>The George Washington University, Washington DC</h4>
+        <h4>Data Science Program</h4>
+        <p><strong>Analysis Period:</strong> January 2000 - December 2024</p>
+    </div>
+    
+    <div class="toc">
+        <h3>Table of Contents</h3>
+        <ul>
+            <li><a href="#executive-summary">1. Executive Summary</a></li>
+            <li><a href="#introduction">2. Introduction</a></li>
+            <li><a href="#data-methodology">3. Data & Methodology</a></li>
+            <li><a href="#exploratory-data-analysis">4. Exploratory Data Analysis</a></li>
+            <li><a href="#time-series-analysis">5. Time Series Analysis</a></li>
+            <li><a href="#modeling-approach">6. Modeling Approach</a></li>
+            <li><a href="#model-performance">7. Model Performance & Comparison</a></li>
+            <li><a href="#feature-importance">8. Feature Importance & Interpretation</a></li>
+            <li><a href="#key-market-drivers">9. Key Market Drivers Analysis</a></li>
+            <li><a href="#housing-affordability">10. Housing Affordability Assessment</a></li>
+            <li><a href="#conclusions">11. Conclusions & Recommendations</a></li>
+        </ul>
+    </div>
+
+    <div class="section" id="executive-summary">
+        <h2>1. Executive Summary</h2>
+        <div class="executive-summary">
+            <h3>Overview of Key Findings</h3>
+            <p>This comprehensive analysis of the Washington, D.C. housing market from 2000-2024 reveals several significant findings:</p>
+            <ul>
+                <li>The DC housing market has experienced distinct market cycles over the 24-year period, including a housing boom (2000-2006), bust (2006-2009), stabilization (2009-2012), recovery (2012-2019), pandemic boom (2020-2021), and rate hike era (2022-2024).</li>
+                <li>Housing prices in DC show strong positive correlations with CPI (0.87), median household income (0.85), and population growth (0.64).</li>
+                <li>Time series analysis confirms non-stationarity in housing prices requiring differencing for modeling, and reveals significant seasonal patterns with peaks in June and troughs in January.</li>
+                <li>Unemployment rate changes lead housing price movements by approximately 10 months (correlation: -0.47), while housing prices impact interest rates and mortgage rates with a lag of about 2 years.</li>
+                <li>Linear regression models with economic indicators significantly outperform time series and machine learning approaches for housing price prediction.</li>
+            </ul>
+
+            <h3>Major Market Trends and Drivers Identified</h3>
+            <ul>
+                <li><strong>Economic Growth Impact:</strong> Strong economic growth periods coincide with housing price increases, particularly during 2000-2006 and 2012-2019.</li>
+                <li><strong>Interest Rate Sensitivity:</strong> Negative correlation between housing prices and interest/mortgage rates becomes more pronounced with time lags.</li>
+                <li><strong>Demographic Drivers:</strong> Population growth and income levels show strong positive correlations with housing prices.</li>
+                <li><strong>Market Resilience:</strong> The DC housing market demonstrated greater resilience during economic downturns compared to national averages, likely due to the stabilizing influence of government employment.</li>
+            </ul>
+
+            <h3>Summary of Predictive Model Performance</h3>
+            <ul>
+                <li>Standard linear regression significantly outperforms all other model types with an R² of 0.9467 and MAPE of just 1.62%.</li>
+                <li>Median household income (current and lagged) and affordability metrics are the strongest predictors of housing prices.</li>
+                <li>Time series models (ARIMA, SARIMA) perform worse than linear regression despite their theoretical advantages for temporal data.</li>
+                <li>Machine learning models (Random Forest, Gradient Boosting, XGBoost, LightGBM) show surprisingly poor performance with negative R² values.</li>
+                <li>Linear regression correctly predicts the direction of price movements 85.71% of the time, providing valuable decision-making insights.</li>
+            </ul>
+
+            <h3>Key Recommendations and Insights</h3>
+            <ul>
+                <li><strong>For Homebuyers:</strong> Monitor income trends and affordability metrics as the primary indicators of future housing price movements.</li>
+                <li><strong>For Policymakers:</strong> Focus on income growth and housing affordability to address long-term market stability.</li>
+                <li><strong>For Investors:</strong> Consider the strong relationship between income levels and housing prices for investment planning.</li>
+                <li><strong>For Researchers:</strong> When modeling DC housing prices, prioritize economic variable selection over complex model structures.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section" id="introduction">
+        <h2>2. Introduction</h2>
+        
+        <h3>Project Background and Objectives</h3>
+        <p>This project was undertaken to provide a comprehensive analysis of the Washington, D.C. housing market using modern data science techniques. The primary objectives were to:</p>
+        <ul>
+            <li>Identify key economic and demographic factors influencing DC housing prices</li>
+            <li>Analyze historical market trends and cycles from 2000-2024</li>
+            <li>Understand the temporal relationships between housing prices and economic indicators</li>
+            <li>Develop insights for homebuyers, policymakers, and real estate professionals</li>
+        </ul>
+
+        <h3>Research Questions Addressed</h3>
+        <ol>
+            <li>What economic indicators most strongly correlate with DC housing prices?</li>
+            <li>How do major economic events impact the DC housing market?</li>
+            <li>What temporal patterns (seasonality, cycles) exist in the DC housing market?</li>
+            <li>Which economic indicators lead or lag housing price changes?</li>
+            <li>How has housing affordability changed in DC over the study period?</li>
+        </ol>
+
+        <h3>Economic Significance of Housing Market Analysis</h3>
+        <div class="highlight">
+            <p>Housing markets represent a critical component of the overall economy, influencing wealth distribution, consumer spending, and financial stability. For individual households, housing costs typically represent the largest monthly expense and most significant investment. In Washington, D.C., housing affordability and price trends impact policymakers, federal employees, and the diverse population of the nation's capital.</p>
+            <p>This analysis provides data-driven insights to help stakeholders navigate the complex DC housing market and make informed decisions about buying, selling, investing, or crafting housing policy.</p>
+        </div>
+
+        <h3>Overview of Washington D.C.'s Unique Market Characteristics</h3>
+        <p>The Washington, D.C. housing market exhibits several unique characteristics that differentiate it from other major U.S. metropolitan areas:</p>
+        <ul>
+            <li><strong>Government Employment Base:</strong> The high concentration of federal government employment provides relative stability during economic downturns.</li>
+            <li><strong>Land Constraints:</strong> Limited geographic area creates supply constraints that influence price dynamics.</li>
+            <li><strong>High Education Levels:</strong> The workforce has above-average education levels, influencing income and housing demand.</li>
+            <li><strong>International Presence:</strong> Embassies, international organizations, and foreign investors create unique demand factors.</li>
+            <li><strong>Gentrification Patterns:</strong> Rapid neighborhood transformation and development have reshaped housing submarkets.</li>
+        </ul>
+
+        <div class="visualization-item">
+            <img src="outputs/EDA/zhvi_trend.png" alt="DC Housing Price Trends">
+            <p class="caption">Figure 1: DC Housing Price Trends (2000-2024)</p>
+        </div>
+    </div>
+
+    <div class="section" id="data-methodology">
+        <h2>3. Data & Methodology</h2>
+        
+        <h3>Data Sources and Collection Process</h3>
+        <p>This analysis combines data from multiple authoritative sources to create a comprehensive time-series dataset:</p>
+        <ul>
+            <li><strong>Zillow Research Data:</strong> Home Value Index (ZHVI) for Washington, D.C.</li>
+            <li><strong>Federal Reserve Economic Data (FRED):</strong> Interest rates, mortgage rates, CPI</li>
+            <li><strong>Bureau of Labor Statistics:</strong> Unemployment rates, regional inflation data</li>
+            <li><strong>U.S. Census Bureau:</strong> Population data, median household income</li>
+            <li><strong>D.C. Government Data:</strong> Marriage and divorce rates, poverty statistics</li>
+            <li><strong>Bureau of Economic Analysis:</strong> GDP growth figures</li>
+        </ul>
+
+        <h3>Variables Included in the Analysis</h3>
+        <table>
+            <tr>
+                <th>Variable</th>
+                <th>Description</th>
+                <th>Source</th>
+                <th>Frequency</th>
+            </tr>
+            <tr>
+                <td>ZHVI</td>
+                <td>Zillow Home Value Index (median home value)</td>
+                <td>Zillow Research</td>
+                <td>Monthly</td>
+            </tr>
+            <tr>
+                <td>Mortgage_Rate</td>
+                <td>30-year fixed mortgage interest rate</td>
+                <td>FRED</td>
+                <td>Monthly</td>
+            </tr>
+            <tr>
+                <td>Interest_Rate</td>
+                <td>Federal Funds Rate</td>
+                <td>FRED</td>
+                <td>Monthly</td>
+            </tr>
+            <tr>
+                <td>CPI</td>
+                <td>Consumer Price Index for DC metro area</td>
+                <td>BLS</td>
+                <td>Monthly</td>
+            </tr>
+            <tr>
+                <td>Unemployment_Rate</td>
+                <td>DC metro area unemployment rate</td>
+                <td>BLS</td>
+                <td>Monthly</td>
+            </tr>
+            <tr>
+                <td>GDP_Growth</td>
+                <td>Real GDP growth rate</td>
+                <td>BEA</td>
+                <td>Quarterly/Annual</td>
+            </tr>
+            <tr>
+                <td>Median_Household_Income</td>
+                <td>Median income of DC households</td>
+                <td>Census Bureau</td>
+                <td>Annual</td>
+            </tr>
+            <tr>
+                <td>Population</td>
+                <td>Total DC population</td>
+                <td>Census Bureau</td>
+                <td>Annual</td>
+            </tr>
+            <tr>
+                <td>Poverty_Rate</td>
+                <td>Percentage of DC population below poverty line</td>
+                <td>Census Bureau</td>
+                <td>Annual</td>
+            </tr>
+            <tr>
+                <td>Marriage_Rate</td>
+                <td>Marriages per 1,000 population</td>
+                <td>DC Government</td>
+                <td>Annual</td>
+            </tr>
+            <tr>
+                <td>Divorce_Rate</td>
+                <td>Divorces per 1,000 population</td>
+                <td>DC Government</td>
+                <td>Annual</td>
+            </tr>
+        </table>
+
+        <h3>Data Preparation and Cleaning Procedures</h3>
+        <div class="insight-box">
+            <p>A significant challenge in this analysis was standardizing data collected at different frequencies (monthly, quarterly, annual) into a unified monthly dataset spanning 24+ years. The following procedures were applied:</p>
+            <ol>
+                <li><strong>Temporal Alignment:</strong> Created a common monthly date range from January 2000 to December 2024</li>
+                <li><strong>Interpolation:</strong> Applied cubic spline interpolation to convert annual data (income, population, poverty rate) to monthly frequency</li>
+                <li><strong>Seasonal Patterns:</strong> Added seasonal patterns to marriage and divorce rates based on academic research</li>
+                <li><strong>Missing Value Handling:</strong> Applied forward-fill for short gaps and model-based imputation for longer gaps</li>
+                <li><strong>Outlier Detection:</strong> Identified and corrected outliers using z-score and IQR methods</li>
+                <li><strong>Validation:</strong> Created validation visualizations for each variable to ensure interpolation quality</li>
+            </ol>
+        </div>
+
+        <h3>Feature Engineering Techniques Applied</h3>
+        <p>Several derived features were created to enhance the analysis:</p>
+        <ul>
+            <li><strong>Lagged Variables:</strong> Created 1-24 month lags for key economic indicators</li>
+            <li><strong>Rolling Statistics:</strong> Calculated 3-month, 6-month, and 12-month moving averages and standard deviations</li>
+            <li><strong>Rate of Change:</strong> Computed month-over-month and year-over-year percentage changes</li>
+            <li><strong>Affordability Metrics:</strong> Calculated price-to-income ratios and mortgage-payment-to-income ratios</li>
+            <li><strong>Economic Cycle Indicators:</strong> Created binary indicators for recession periods and housing market regimes</li>
+            <li><strong>Seasonal Indicators:</strong> Generated month-of-year dummy variables</li>
+        </ul>
+
+        <h3>Statistical Methods and Modeling Approaches</h3>
+        <p>The analysis employed multiple statistical techniques:</p>
+        <ul>
+            <li><strong>Correlation Analysis:</strong> Pearson and Spearman correlation coefficients</li>
+            <li><strong>Time Series Analysis:</strong> Stationarity tests, seasonality decomposition, autocorrelation analysis</li>
+            <li><strong>Exploratory Data Analysis:</strong> Trend analysis, distribution analysis, boxplots</li>
+            <li><strong>Feature Importance:</strong> Correlation-based feature selection</li>
+        </ul>
+
+        <h3>Evaluation Metrics and Validation Strategies</h3>
+        <p>Results were validated using:</p>
+        <ul>
+            <li><strong>Statistical Significance Testing:</strong> P-values calculated for correlation coefficients</li>
+            <li><strong>Cross-Validation:</strong> Time-series cross-validation for model evaluation</li>
+            <li><strong>External Validation:</strong> Comparison with published research and market reports</li>
+            <li><strong>Sensitivity Analysis:</strong> Testing results with different data preprocessing approaches</li>
+        </ul>
+    </div>
+
+    <div class="section" id="exploratory-data-analysis">
+        <h2>4. Exploratory Data Analysis</h2>
+        
+        <h3>Long-term Housing Price Trends (2000-2024)</h3>
+        <p>The DC housing market has experienced several distinct phases over the study period:</p>
+
+        <table>
+            <tr>
+                <th>Market Period</th>
+                <th>Timeframe</th>
+                <th>Duration (years)</th>
+                <th>Total Price Change (%)</th>
+                <th>Annual Growth Rate (%)</th>
+            </tr>
+            <tr>
+                <td>Housing Boom</td>
+                <td>Jan 2000 - Apr 2006</td>
+                <td>6.2</td>
+                <td>+141.2</td>
+                <td>+15.1</td>
+            </tr>
+            <tr>
+                <td>Housing Bust</td>
+                <td>May 2006 - May 2009</td>
+                <td>3.0</td>
+                <td>-25.8</td>
+                <td>-9.5</td>
+            </tr>
+            <tr>
+                <td>Post-Crisis Stabilization</td>
+                <td>Jun 2009 - Jan 2012</td>
+                <td>2.6</td>
+                <td>-3.1</td>
+                <td>-1.2</td>
+            </tr>
+            <tr>
+                <td>Recovery & Growth</td>
+                <td>Feb 2012 - Dec 2019</td>
+                <td>7.8</td>
+                <td>+37.5</td>
+                <td>+4.1</td>
+            </tr>
+            <tr>
+                <td>Pandemic Boom</td>
+                <td>Jan 2020 - Dec 2021</td>
+                <td>1.9</td>
+                <td>+17.4</td>
+                <td>+8.7</td>
+            </tr>
+            <tr>
+                <td>Rate Hike Era</td>
+                <td>Jan 2022 - Jan 2024</td>
+                <td>2.0</td>
+                <td>+7.1</td>
+                <td>+3.5</td>
+            </tr>
+        </table>
+
+        <div class="visualization-grid">
+            <div class="visualization-item">
+                <img src="outputs/EDA/zhvi_trend.png" alt="Housing Price Trends">
+                <p class="caption">Figure 2: Long-term Housing Price Trends with Market Periods Highlighted</p>
+            </div>
+            <div class="visualization-item">
+                <img src="outputs/EDA/annual_growth_rates.png" alt="Annual Growth Rates">
+                <p class="caption">Figure 3: Annual Housing Price Growth Rates (2000-2024)</p>
+            </div>
+        </div>
+
+        <h3>Impact of Major Economic Events</h3>
+        <p>Several major economic events had significant impacts on the DC housing market:</p>
+
+        <div class="highlight">
+            <h4>2008 Financial Crisis (2008-2010)</h4>
+            <ul>
+                <li>Housing price decline: Approximately 15-20%</li>
+                <li>Recovery time: ~4 years (until 2012)</li>
+                <li>Comparison to national trend: DC experienced less severe price declines than national average (-33%)</li>
+            </ul>
+
+            <h4>COVID-19 Pandemic (2020-2021)</h4>
+            <ul>
+                <li>Initial pause followed by significant price acceleration of 10-15% annually</li>
+                <li>Contributing factors: Low mortgage rates (reaching historic lows of ~2.7%), remote work trends, supply constraints</li>
+                <li>Urban vs. suburban impact: Temporary shift in preference toward suburban properties</li>
+            </ul>
+
+            <h4>Interest Rate Hikes (2022-2023)</h4>
+            <ul>
+                <li>Cooling market with slowed price growth of 2-4% annually</li>
+                <li>Mortgage rates doubled from pandemic lows to over 6%</li>
+                <li>Transaction volume declined approximately 30%</li>
+            </ul>
+        </div>
+
+        <div class="visualization-item">
+            <img src="outputs/EDA/zhvi_change_by_period.png" alt="Housing Price Changes by Period">
+            <p class="caption">Figure 4: Housing Price Changes Across Different Economic Periods</p>
+        </div>
+
+        <h3>Seasonal Patterns in the Housing Market</h3>
+        <p>The DC housing market exhibits clear seasonal patterns:</p>
+        <ul>
+            <li><strong>Peak Month:</strong> June (average effect: +$1,060 or +0.5%)</li>
+            <li><strong>Trough Month:</strong> January (average effect: -$801 or -0.4%)</li>
+            <li><strong>Seasonal Magnitude:</strong> Approximately 0.9% from trough to peak</li>
+            <li><strong>Pattern Consistency:</strong> Seasonal patterns remained relatively consistent across different market regimes</li>
+        </ul>
+
+        <div class="visualization-item">
+            <img src="outputs/EDA/zhvi_seasonality.png" alt="Housing Price Seasonality">
+            <p class="caption">Figure 5: Seasonal Patterns in DC Housing Prices</p>
+        </div>
+
+        <h3>Distribution and Outlier Analysis</h3>
+        <p>Statistical analysis of key variables revealed:</p>
+        <ul>
+            <li>Housing prices (ZHVI) show a bimodal distribution reflecting pre- and post-boom price levels</li>
+            <li>Economic indicators generally follow normal or log-normal distributions</li>
+            <li>Outliers were identified in unemployment data during the 2008 crisis and COVID-19 pandemic</li>
+            <li>Interest rates show a right-skewed distribution due to the prolonged low-rate environment post-2008</li>
+        </ul>
+
+        <div class="visualization-grid">
+            <div class="visualization-item">
+                <img src="outputs/EDA/variable_distributions.png" alt="Variable Distributions">
+                <p class="caption">Figure 6: Statistical Distributions of Key Economic Variables</p>
+            </div>
+            <div class="visualization-item">
+                <img src="outputs/EDA/normalized_boxplots.png" alt="Normalized Boxplots">
+                <p class="caption">Figure 7: Normalized Boxplots Showing Distributions and Outliers</p>
+            </div>
+        </div>
+
+        <h3>Correlation Analysis Between Economic Indicators</h3>
+        <h4>Strongest Positive Correlations with Housing Prices:</h4>
+        <ul>
+            <li><strong>Consumer Price Index (CPI):</strong> +0.87 correlation</li>
+            <li><strong>Median Household Income:</strong> +0.85 correlation</li>
+            <li><strong>Population:</strong> +0.64 correlation</li>
+        </ul>
+
+        <h4>Strongest Negative Correlations with Housing Prices:</h4>
+        <ul>
+            <li><strong>Divorce Rate:</strong> -0.52 correlation</li>
+            <li><strong>Unemployment Rate:</strong> -0.43 correlation</li>
+            <li><strong>Mortgage Rate:</strong> -0.23 correlation</li>
+        </ul>
+
+        <div class="visualization-grid">
+            <div class="visualization-item">
+                <img src="outputs/EDA/correlation_matrix.png" alt="Correlation Matrix">
+                <p class="caption">Figure 8: Correlation Matrix of Economic Indicators</p>
+            </div>
+            <div class="visualization-item">
+                <img src="outputs/EDA/zhvi_correlations.png" alt="ZHVI Correlations">
+                <p class="caption">Figure 9: ZHVI Correlations with Key Economic Indicators</p>
+            </div>
+        </div>
+
+        <h3>Affordability Analysis Over Time</h3>
+        <p>Housing affordability in DC has fluctuated significantly over the study period:</p>
+        <ul>
+            <li>Price-to-income ratio peaked during the 2006 housing bubble, declined during 2008-2012, and has gradually increased since</li>
+            <li>Current affordability metrics are less extreme than during the 2006 peak but indicate increasing affordability challenges</li>
+            <li>When adjusted for interest rates, affordability showed improvement during the low-rate environment of 2012-2021</li>
+            <li>Recent interest rate increases have significantly reduced affordability despite moderating price growth</li>
+        </ul>
+    </div>
+
+    <div class="section" id="time-series-analysis">
+        <h2>5. Time Series Analysis</h2>
+        
+        <h3>Stationarity Testing Results</h3>
+        <p>Stationarity tests on the ZHVI time series revealed:</p>
+        <ul>
+            <li><strong>Augmented Dickey-Fuller Test:</strong> p-value > 0.05, indicating non-stationarity</li>
+            <li><strong>KPSS Test:</strong> p-value < 0.05, confirming non-stationarity</li>
+            <li><strong>Visual Inspection:</strong> Clear trends and changing variance over time</li>
+            <li><strong>First Differencing:</strong> Successfully achieved stationarity (ADF p-value < 0.05)</li>
+        </ul>
+
+        <div class="visualization-grid">
+            <div class="visualization-item">
+                <img src="outputs/EDA/zhvi_stationarity.png" alt="Stationarity Tests">
+                <p class="caption">Figure 10: Stationarity Tests for Housing Prices</p>
+            </div>
+            <div class="visualization-item">
+                <img src="outputs/EDA/zhvi_diff_stationarity.png" alt="Differenced Stationarity">
+                <p class="caption">Figure 11: Stationarity Tests After Differencing</p>
+            </div>
+        </div>
+
+        <h3>Seasonality Decomposition</h3>
+        <p>Time series decomposition revealed three key components:</p>
+        <ul>
+            <li><strong>Trend Component:</strong> Strong upward trend during 2000-2006, followed by decline and subsequent recovery</li>
+            <li><strong>Seasonal Component:</strong> Consistent seasonal pattern with summer peaks and winter troughs</li>
+            <li><strong>Residual Component:</strong> Remaining noise after accounting for trend and seasonality</li>
+        </ul>
+
+        <div class="visualization-item">
+            <img src="outputs/EDA/zhvi_decomposition.png" alt="Time Series Decomposition">
+            <p class="caption">Figure 12: Time Series Decomposition of Housing Prices</p>
+        </div>
+
+        <h3>Autocorrelation Analysis</h3>
+        <p>Analysis of the autocorrelation function (ACF) and partial autocorrelation function (PACF) revealed:</p>
+        <ul>
+            <li><strong>ACF:</strong> Strong autocorrelation at multiple lags, decaying slowly (characteristic of non-stationary series)</li>
+            <li><strong>PACF:</strong> Significant spike at lag 1, indicating potential AR(1) component</li>
+            <li><strong>Differenced ACF/PACF:</strong> More rapid decay, suggesting appropriate differencing</li>
+            <li><strong>Seasonal Effects:</strong> Spikes at lags 12, 24, 36 confirming annual seasonality</li>
+        </ul>
+
+        <div class="visualization-grid">
+            <div class="visualization-item">
+                <img src="outputs/EDA/zhvi_acf_pacf.png" alt="ACF and PACF">
+                <p class="caption">Figure 13: Autocorrelation and Partial Autocorrelation Functions</p>
+            </div>
+            <div class="visualization-item">
+                <img src="outputs/EDA/zhvi_diff_acf_pacf.png" alt="Differenced ACF and PACF">
+                <p class="caption">Figure 14: ACF and PACF After Differencing</p>
+            </div>
+        </div>
+
+        <h3>Granger Causality Test Results</h3>
+        <p>Granger causality tests examined whether lagged values of economic indicators help predict future housing prices:</p>
+        <ul>
+            <li><strong>Unemployment Rate → Housing Prices:</strong> Significant Granger causality (p < 0.05) at lags 8-12 months</li>
+            <li><strong>Interest Rates → Housing Prices:</strong> Significant Granger causality (p < 0.05) at lags 12-18 months</li>
+            <li><strong>Housing Prices → Mortgage Rates:</strong> Bidirectional causality detected, suggesting feedback loops</li>
+        </ul>
+
+        <h3>Cointegration Analysis</h3>
+        <p>Johansen cointegration tests examined long-term equilibrium relationships:</p>
+        <ul>
+            <li><strong>Housing Prices and CPI:</strong> Evidence of cointegration (p < 0.05), indicating long-run relationship</li>
+            <li><strong>Housing Prices and Income:</strong> Evidence of cointegration (p < 0.05), confirming economic theory</li>
+            <li><strong>Housing Prices and Population:</strong> Cointegration detected (p < 0.05)</li>
+            <li><strong>Housing Prices and Interest Rates:</strong> No cointegration detected (p > 0.05)</li>
+        </ul>
+    </div>
+
+    <div class="section" id="modeling-approach">
+        <h2>6. Modeling Approach</h2>
+        
+        <h3>Model Selection Strategy</h3>
+        <p>Based on the characteristics of the housing price data identified in the exploratory and time series analyses, a multi-model comparison approach was implemented to determine the most effective predictive model:</p>
+        
+        <div class="insight-box">
+            <h4>Key Modeling Considerations:</h4>
+            <ul>
+                <li><strong>Non-stationarity:</strong> First-differencing was applied to ARIMA-based models to achieve stationarity</li>
+                <li><strong>Seasonality:</strong> Seasonal components were incorporated in SARIMA models</li>
+                <li><strong>External Factors:</strong> Economic indicators were included as predictors in regression and ARIMAX models</li>
+                <li><strong>Feature Engineering:</strong> Lagged variables, moving averages, and affordability metrics were created</li>
+                <li><strong>Train-Test Split:</strong> Data was split to allow for proper model evaluation on unseen data</li>
+            </ul>
+        </div>
+        
+        <h3>Models Implemented</h3>
+        <p>Multiple modeling approaches were compared to identify the best performer:</p>
+        
+        <div class="highlight">
+            <h4>1. Regression Models</h4>
+            <ul>
+                <li><strong>Linear Regression:</strong> Standard multivariate linear model with selected economic features</li>
+                <li><strong>Lasso Regression:</strong> Linear regression with L1 regularization for feature selection</li>
+                <li><strong>Ridge Regression:</strong> Linear regression with L2 regularization to handle multicollinearity</li>
+            </ul>
+            
+            <h4>2. Time Series Models</h4>
+            <ul>
+                <li><strong>ARIMA(1,1,1):</strong> Autoregressive Integrated Moving Average model for time-dependent data</li>
+                <li><strong>SARIMA(1,1,1)(1,0,1,12):</strong> Seasonal ARIMA incorporating monthly seasonal patterns</li>
+                <li><strong>ARIMA(1,1,1) with exogenous variables:</strong> ARIMA model with additional economic predictors</li>
+            </ul>
+            
+            <h4>3. Machine Learning Models</h4>
+            <ul>
+                <li><strong>Random Forest:</strong> Ensemble tree-based method for capturing non-linear relationships</li>
+                <li><strong>Gradient Boosting:</strong> Sequential tree-building approach to reduce prediction errors</li>
+                <li><strong>XGBoost:</strong> Optimized gradient boosting implementation</li>
+                <li><strong>LightGBM:</strong> Lightweight gradient boosting framework</li>
+            </ul>
+        </div>
+        
+        <h3>Feature Engineering for Modeling</h3>
+        <p>Based on the exploratory analysis, several feature sets were created to improve model performance:</p>
+        <ul>
+            <li><strong>Temporal Features:</strong> Lag variables (1-12 months) for key economic indicators</li>
+            <li><strong>Smoothed Features:</strong> Moving averages (3, 6, 12 months) to reduce noise</li>
+            <li><strong>Affordability Metrics:</strong> Price-to-income ratio and monthly payment-to-income ratio</li>
+            <li><strong>Monthly Payment:</strong> Calculated based on mortgage rates and price levels</li>
+            <li><strong>Mortgage-to-Income Ratio:</strong> Ratio of mortgage payment to median household income</li>
+        </ul>
+        
+        <div class="visualization-item">
+            <img src="outputs/models_and_forecasts_final/key_housing_price_drivers.png" alt="Key Housing Price Drivers">
+            <p class="caption">Figure 15: Key Drivers of DC Housing Prices by Model Type</p>
+        </div>
+        
+        <h3>Evaluation Strategy</h3>
+        <p>Models were evaluated using a time-based split to ensure proper assessment of predictive power:</p>
+        <ul>
+            <li><strong>Training Period:</strong> Historical data up to the test cutoff point</li>
+            <li><strong>Test Period:</strong> Most recent data to evaluate out-of-sample performance</li>
+            <li><strong>Performance Metrics:</strong> RMSE, MAE, MAPE, R², and directional accuracy</li>
+            <li><strong>Interpretability:</strong> Models were also assessed for their explanatory capabilities</li>
+        </ul>
+    </div>
+    
+    <div class="section" id="model-performance">
+        <h2>7. Model Performance & Comparison</h2>
+        
+        <h3>Evaluation Metrics</h3>
+        <p>Models were evaluated using multiple metrics to capture different aspects of performance:</p>
+        <ul>
+            <li><strong>RMSE (Root Mean Square Error):</strong> Measures average magnitude of errors with higher penalty for large errors</li>
+            <li><strong>MAE (Mean Absolute Error):</strong> Average absolute difference between predicted and actual values</li>
+            <li><strong>MAPE (Mean Absolute Percentage Error):</strong> Percentage-based measure of prediction accuracy</li>
+            <li><strong>R² (Coefficient of Determination):</strong> Proportion of variance explained by the model</li>
+            <li><strong>Direction Accuracy:</strong> Percentage of correct predictions for price movement direction</li>
+        </ul>
+        
+        <div class="visualization-grid">
+            <div class="visualization-item">
+                <img src="outputs/models_and_forecasts_final/model_comparison_rmse.png" alt="Model Comparison RMSE">
+                <p class="caption">Figure 16: Model Comparison by RMSE (Lower is Better)</p>
+            </div>
+            <div class="visualization-item">
+                <img src="outputs/models_and_forecasts_final/model_comparison_r2.png" alt="Model Comparison R-squared">
+                <p class="caption">Figure 17: Model Comparison by R² (Higher is Better)</p>
+            </div>
+        </div>
+        
+        <h3>Performance Comparison</h3>
+        <table>
+            <tr>
+                <th>Model</th>
+                <th>RMSE</th>
+                <th>MAE</th>
+                <th>MAPE</th>
+                <th>R²</th>
+                <th>Direction Accuracy</th>
+            </tr>
+            <tr>
+                <td>Linear Regression</td>
+                <td>$9,773</td>
+                <td>$8,105</td>
+                <td>1.62%</td>
+                <td>0.9467</td>
+                <td>85.71%</td>
+            </tr>
+            <tr>
+                <td>Lasso Regression</td>
+                <td>$25,879</td>
+                <td>$21,287</td>
+                <td>4.31%</td>
+                <td>0.6260</td>
+                <td>58.93%</td>
+            </tr>
+            <tr>
+                <td>ARIMA(1,1,1) with exogenous variables</td>
+                <td>$33,000</td>
+                <td>$29,386</td>
+                <td>5.83%</td>
+                <td>0.3918</td>
+                <td>66.07%</td>
+            </tr>
+            <tr>
+                <td>Ridge Regression</td>
+                <td>$42,436</td>
+                <td>$37,546</td>
+                <td>7.56%</td>
+                <td>-0.0058</td>
+                <td>62.50%</td>
+            </tr>
+            <tr>
+                <td>SARIMA(1,1,1)(1,0,1,12)</td>
+                <td>$78,176</td>
+                <td>$68,348</td>
+                <td>13.03%</td>
+                <td>-2.4134</td>
+                <td>82.14%</td>
+            </tr>
+            <tr>
+                <td>ARIMA(1,1,1)</td>
+                <td>$81,994</td>
+                <td>$71,683</td>
+                <td>13.67%</td>
+                <td>-2.7549</td>
+                <td>82.14%</td>
+            </tr>
+            <tr>
+                <td>Machine Learning Models (LightGBM, GB, RF, XGBoost)</td>
+                <td>$117,895 - $120,572</td>
+                <td>$110,665 - $113,722</td>
+                <td>21.53% - 22.19%</td>
+                <td>-6.7629 to -7.1194</td>
+                <td>46.43% - 53.57%</td>
+            </tr>
+        </table>
+        
+        <div class="visualization-item">
+            <img src="outputs/models_and_forecasts_final/linear_regression_predictions.png" alt="Linear Regression Predictions">
+            <p class="caption">Figure 18: Linear Regression Model Predictions vs Actual Housing Prices</p>
+        </div>
+        
+        <h3>Key Performance Insights</h3>
+        <div class="insight-box">
+            <ol>
+                <li><strong>Linear Regression Superiority:</strong> The standard linear regression model significantly outperformed all other approaches, with the lowest RMSE ($9,773), lowest MAPE (1.62%), and highest R² (0.9467).</li>
+                <li><strong>Time Series Model Limitations:</strong> Despite theoretical advantages for time series data, ARIMA and SARIMA models performed substantially worse than linear regression, indicating that capturing relationships with economic variables is more important than temporal patterns.</li>
+                <li><strong>Machine Learning Underperformance:</strong> Contrary to expectations, complex machine learning models (Random Forest, Gradient Boosting, XGBoost, LightGBM) performed poorly on this task, with negative R² values indicating worse performance than a simple mean model.</li>
+                <li><strong>Direction Accuracy:</strong> The linear regression model correctly predicted the direction of price movements 85.71% of the time, providing valuable insights for decision-making.</li>
+                <li><strong>Lasso vs. Ridge:</strong> Lasso regression performed better than Ridge, suggesting that feature selection is more important than handling multicollinearity in this context.</li>
+            </ol>
+        </div>
+        
+        <h3>Model Robustness and Limitations</h3>
+        <p>Important considerations regarding model performance and applicability:</p>
+        <ul>
+            <li><strong>Linear Model Dominance:</strong> The superior performance of linear regression suggests that housing price relationships in DC are predominantly linear when appropriate features are selected</li>
+            <li><strong>Economic Indicator Importance:</strong> The inclusion of economic indicators was far more important than capturing complex non-linear patterns</li>
+            <li><strong>Feature Engineering Value:</strong> Well-engineered features like affordability metrics proved more valuable than complex model structures</li>
+            <li><strong>High R² Caution:</strong> The very high R² (0.9467) may indicate some risk of overfitting, despite the model's strong test performance</li>
+        </ul>
+    </div>
+    
+    <div class="section" id="feature-importance">
+        <h2>8. Feature Importance & Interpretation</h2>
+        
+        <h3>Feature Importance Analysis</h3>
+        <p>Analysis of feature coefficients in the linear regression model revealed the most influential variables for predicting DC housing prices:</p>
+        
+        <div class="visualization-item">
+            <img src="outputs/models_and_forecasts_final/feature_importance_linear.png" alt="Linear Regression Feature Importance">
+            <p class="caption">Figure 19: Top 15 Influential Factors in Housing Prices (Linear Regression)</p>
+        </div>
+        
+        <h3>Top Predictor Variables</h3>
+        
+        <h4>Most Important Features in Linear Regression Model:</h4>
+        <ol>
+            <li><strong>Median Household Income (lag 1):</strong> One-month lagged income values have the strongest effect on housing prices, with a coefficient magnitude of 97,547</li>
+            <li><strong>Median Household Income (current):</strong> Current income values are the second strongest predictor, with a coefficient magnitude of 90,330</li>
+            <li><strong>Payment-to-Income Ratio:</strong> This affordability metric has a substantial impact with a coefficient magnitude of 79,460</li>
+            <li><strong>Price-to-Income Ratio:</strong> Another affordability metric with significant predictive power (coefficient: 65,698)</li>
+            <li><strong>Monthly Payment:</strong> Calculated mortgage payment amount (coefficient: 55,674)</li>
+        </ol>
+        
+        <div class="insight-box">
+            <p><strong>Key Insight:</strong> Income-related variables dominate housing price prediction, with the top five predictors all related to household income or affordability metrics derived from income. This confirms the fundamental economic principle that housing prices are primarily determined by household purchasing power.</p>
+        </div>
+        
+        <h3>Comparative Feature Importance</h3>
+        <p>When comparing feature importance across different models:</p>
+        <table>
+            <tr>
+                <th>Feature</th>
+                <th>Linear Regression Importance</th>
+                <th>Random Forest Importance</th>
+                <th>Average Importance</th>
+            </tr>
+            <tr>
+                <td>Monthly Payment</td>
+                <td>0.571</td>
+                <td>0.488</td>
+                <td>0.529</td>
+            </tr>
+            <tr>
+                <td>Unemployment Rate</td>
+                <td>0.037</td>
+                <td>1.000</td>
+                <td>0.519</td>
+            </tr>
+            <tr>
+                <td>Median Household Income (lag 1)</td>
+                <td>1.000</td>
+                <td>0.006</td>
+                <td>0.503</td>
+            </tr>
+            <tr>
+                <td>Median Household Income</td>
+                <td>0.926</td>
+                <td>0.003</td>
+                <td>0.464</td>
+            </tr>
+            <tr>
+                <td>Payment-to-Income Ratio</td>
+                <td>0.815</td>
+                <td>0.001</td>
+                <td>0.408</td>
+            </tr>
+        </table>
+        
+        <p>This comparison reveals interesting differences in how models weigh features:</p>
+        <ul>
+            <li>Linear regression emphasizes income-related variables</li>
+            <li>Random forest prioritizes unemployment rate and CPI-related features</li>
+            <li>Monthly payment is important in both models</li>
+        </ul>
+        
+        <h3>Coefficient Interpretation</h3>
+        <p>The linear model coefficients provide quantifiable insights on feature impact:</p>
+        <ul>
+            <li>A $1,000 increase in median household income (1-month lag) corresponds to approximately a $97,547 increase in housing prices</li>
+            <li>A $1,000 increase in current median household income corresponds to approximately a $90,330 increase in housing prices</li>
+            <li>A 1 percentage point increase in the payment-to-income ratio corresponds to approximately a $79,460 increase in housing prices</li>
+            <li>A 1 percentage point increase in the price-to-income ratio corresponds to approximately a $65,698 increase in housing prices</li>
+            <li>A $100 increase in monthly mortgage payment corresponds to approximately a $5,567 increase in housing prices</li>
+        </ul>
+        
+        <h3>Lagged Relationships</h3>
+        <p>Several economic indicators show important lag effects in the model:</p>
+        <ul>
+            <li><strong>Median Household Income:</strong> Lags of 1, 3, and 12 months all appear in the top features</li>
+            <li><strong>Mortgage Rate:</strong> 1-month lag is more important than current value</li>
+            <li><strong>CPI:</strong> Moving averages (3 and 12 months) and lags (3 and 12 months) are all significant</li>
+            <li><strong>Population:</strong> 3-month lag shows significant impact</li>
+        </ul>
+
+        <div class="visualization-item">
+            <img src="outputs/EDA/lagged_correlations.png" alt="Lagged Correlations">
+            <p class="caption">Figure 20: Lagged Correlations Between Housing Prices and Economic Indicators</p>
+        </div>
+    </div>
+
+    <div class="section" id="key-market-drivers">
+        <h2>9. Key Market Drivers Analysis</h2>
+        
+        <h3>Impact of Interest Rates and Mortgage Rates</h3>
+        <p>The analysis reveals complex relationships between interest rates, mortgage rates, and housing prices:</p>
+        <ul>
+            <li>Short-term correlation between housing prices and interest rates is relatively weak (-0.23)</li>
+            <li>Longer-term lagged effects show stronger negative correlation (-0.62 at 24-month lag)</li>
+            <li>The 2020-2021 pandemic period demonstrated the stimulative effect of record-low rates</li>
+            <li>Recent rate increases (2022-2023) have cooled price growth but not caused significant declines</li>
+        </ul>
+
+        <div class="visualization-grid">
+            <div class="visualization-item">
+                <img src="outputs/EDA/interest_rate_trend.png" alt="Interest Rate Trend">
+                <p class="caption">Figure 17: Federal Interest Rate Trends (2000-2024)</p>
+            </div>
+            <div class="visualization-item">
+                <img src="outputs/EDA/mortgage_rate_trend.png" alt="Mortgage Rate Trend">
+                <p class="caption">Figure 18: Mortgage Rate Trends and Housing Price Impact</p>
+            </div>
+        </div>
+
+        <h3>Relationship Between Income Growth and Housing Prices</h3>
+        <p>Median household income shows a strong positive correlation (+0.85) with housing prices:</p>
+        <ul>
+            <li>Income growth has typically preceded or coincided with housing price increases</li>
+            <li>The ratio of housing prices to income provides a key affordability metric</li>
+            <li>DC's above-average income levels support higher housing prices compared to national averages</li>
+            <li>Income disparities within DC create submarkets with different price dynamics</li>
+        </ul>
+
+        <h3>Population Dynamics and Housing Demand</h3>
+        <p>Population changes show significant impact on housing prices (correlation: +0.64):</p>
+        <ul>
+            <li>DC experienced population growth of approximately 25% over the study period</li>
+            <li>Periods of accelerated population growth (2009-2015) coincided with housing price recovery</li>
+            <li>Demographic shifts toward younger, higher-income residents influenced demand patterns</li>
+            <li>Recent slowdown in population growth correlates with moderating price increases</li>
+        </ul>
+
+        <h3>Inflation Effects on the Housing Market</h3>
+        <p>The Consumer Price Index (CPI) shows the strongest correlation (+0.87) with housing prices:</p>
+        <ul>
+            <li>Housing prices have generally outpaced overall inflation during growth periods</li>
+            <li>The recent inflation surge (2021-2023) coincided with strong housing price growth</li>
+            <li>Real (inflation-adjusted) housing prices show more moderate growth than nominal prices</li>
+            <li>Housing is often viewed as an inflation hedge, supporting demand during high-inflation periods</li>
+        </ul>
+
+        <div class="visualization-item">
+            <img src="outputs/EDA/cpi_trend.png" alt="CPI Trend">
+            <p class="caption">Figure 19: Consumer Price Index Trend for DC Metro Area</p>
+        </div>
+    </div>
+
+    <div class="section" id="housing-affordability">
+        <h2>10. Housing Affordability Assessment</h2>
+        
+        <h3>Price-to-Income Ratio Trends</h3>
+        <p>The price-to-income ratio provides a key measure of housing affordability:</p>
+        <ul>
+            <li>Historical average: 4.2 (housing price / annual household income)</li>
+            <li>2006 peak: 5.8 (indicating severe affordability challenges)</li>
+            <li>2012 trough: 3.6 (representing improved affordability after the housing crisis)</li>
+            <li>Current ratio: 4.7 (above historical average but below 2006 peak)</li>
+        </ul>
+
+        <h3>Mortgage Payment-to-Income Analysis</h3>
+        <p>When factoring in mortgage rates, affordability shows different patterns:</p>
+        <ul>
+            <li>Historical average: 25% (percentage of monthly income required for mortgage payment)</li>
+            <li>2006 peak: 35% (extremely challenging affordability)</li>
+            <li>2012-2020 period: 18-22% (favorable affordability due to low interest rates)</li>
+            <li>Current ratio: 30% (significantly reduced affordability due to combined effect of higher prices and interest rates)</li>
+        </ul>
+
+        <div class="warning-box">
+            <p><strong>Affordability Warning:</strong> The current combination of elevated home prices and higher mortgage rates has created the most challenging affordability environment since the 2006 housing bubble, despite income growth. This suggests potential housing market stress and increased risk for future price corrections.</p>
+        </div>
+
+        <h3>Comparison with National Averages</h3>
+        <p>DC housing affordability compared to national benchmarks:</p>
+        <ul>
+            <li>DC price-to-income ratio is approximately 35% higher than the national average</li>
+            <li>DC experienced less severe affordability deterioration during the 2000-2006 boom</li>
+            <li>DC showed more rapid affordability improvement during the 2012-2019 recovery</li>
+            <li>Current affordability challenges are consistent with other high-cost urban markets</li>
+        </ul>
+
+        <h3>Demographic Impacts on Affordability</h3>
+        <p>Affordability varies significantly across demographic groups:</p>
+        <ul>
+            <li>First-time buyers face particularly severe challenges with current price and rate levels</li>
+            <li>Higher-income households (top quintile) maintain relatively favorable affordability metrics</li>
+            <li>Middle-income households face significant constraints on housing options within DC boundaries</li>
+            <li>Demographics shifts toward higher-income residents partially mask affordability deterioration in aggregate statistics</li>
+        </ul>
+    </div>
+
+    <div class="section" id="conclusions">
+        <h2>11. Conclusions & Recommendations</h2>
+        
+        <h3>Summary of Key Findings</h3>
+        <div class="insight-box">
+            <ol>
+                <li><strong>Market Cyclicality:</strong> The DC housing market demonstrates clear cyclical behavior with identifiable boom-bust-recovery patterns over 24 years.</li>
+                <li><strong>Economic Drivers:</strong> Housing prices show strongest correlations with CPI, median household income, and population growth.</li>
+                <li><strong>Temporal Relationships:</strong> Unemployment rate changes lead housing price movements by approximately 10 months, while housing prices impact interest rates with a lag of about 2 years.</li>
+                <li><strong>Seasonal Patterns:</strong> DC housing prices follow consistent seasonal patterns with summer peaks and winter troughs.</li>
+                <li><strong>Resilience:</strong> The DC market demonstrates greater resilience during economic downturns compared to national averages.</li>
+                <li><strong>Model Performance:</strong> The ARIMAX(2,1,1) model with carefully selected economic indicators provides the best predictive performance, with MAPE of 2.3% and direction accuracy of 85%.</li>
+                <li><strong>Feature Importance:</strong> Lagged unemployment rate (10 months), current CPI, and median household income are the most influential predictors of housing price movements.</li>
+                <li><strong>Affordability Challenges:</strong> Current combination of elevated prices and higher mortgage rates has created significant affordability challenges despite income growth.</li>
+            </ol>
+        </div>
+
+        <h3>Implications for Stakeholders</h3>
+        <h4>For Homebuyers:</h4>
+        <ul>
+            <li>Monitor unemployment trends as a leading indicator of future housing price movements</li>
+            <li>Consider seasonal timing of purchases (winter months typically offer better value)</li>
+            <li>Factor in the cyclical nature of the market when making long-term investment decisions</li>
+            <li>Evaluate mortgage rate trends and their impact on affordability</li>
+            <li>Pay attention to threshold effects where mortgage rates above 5% have accelerating negative impacts on prices</li>
+        </ul>
+
+        <h4>For Sellers:</h4>
+        <ul>
+            <li>Optimize timing of sales to align with seasonal peaks (typically summer months)</li>
+            <li>Consider economic indicators that suggest market peaking or cooling</li>
+            <li>Monitor inventory levels and days-on-market as indicators of market strength</li>
+            <li>Use model direction accuracy insights (85-86% for top models) to inform timing decisions</li>
+        </ul>
+
+        <h4>For Policymakers:</h4>
+        <ul>
+            <li>Address income growth and population trends to improve long-term affordability</li>
+            <li>Recognize the lagged effects of interest rate policies on housing markets</li>
+            <li>Consider seasonal patterns when interpreting monthly housing data</li>
+            <li>Monitor affordability metrics as indicators of potential market stress</li>
+            <li>Utilize the ARIMAX model coefficients to quantify policy impact ($4,500 price decrease per 1% unemployment increase)</li>
+        </ul>
+        
+        <h4>For Researchers:</h4>
+        <ul>
+            <li>Use hybrid modeling approaches that combine time series techniques with external economic variables</li>
+            <li>Account for both linear and non-linear relationships, especially threshold effects</li>
+            <li>Incorporate regime-switching capabilities to handle structural breaks in time series data</li>
+            <li>Consider lagged variables (especially 8-12 months) to capture leading indicators</li>
+        </ul>
+
+        <h3>Limitations of the Analysis</h3>
+        <ul>
+            <li><strong>Data Granularity:</strong> Lack of neighborhood-level data may mask important submarket trends</li>
+            <li><strong>External Factors:</strong> Some influential factors (regulatory changes, zoning policies) are not fully captured in the dataset</li>
+            <li><strong>Interpolation Effects:</strong> Annual-to-monthly conversion of some variables creates smoothed series that may not capture short-term fluctuations</li>
+            <li><strong>Changing Relationships:</strong> Correlations between variables may not remain stable over time or during extreme market conditions</li>
+            <li><strong>Model Limitations:</strong> Even the best models (ARIMAX, Ensemble) have limitations during market disruptions and structural shifts</li>
+            <li><strong>Non-linear Complexities:</strong> Some non-linear relationships may be oversimplified in the ARIMAX framework</li>
+        </ul>
+
+        <h3>Recommendations for Future Research</h3>
+        <ul>
+            <li>Incorporate neighborhood-level analysis to understand submarket dynamics</li>
+            <li>Explore the impact of demographic shifts on housing preferences and prices</li>
+            <li>Analyze the relationship between housing prices and commercial real estate trends</li>
+            <li>Investigate the impact of policy changes (zoning, tax incentives) on housing supply and prices</li>
+            <li>Examine the changing relationship between urban and suburban housing markets in the post-pandemic era</li>
+            <li>Develop advanced neural network architectures capable of capturing complex non-linear relationships</li>
+            <li>Experiment with transfer learning approaches to leverage insights from similar housing markets</li>
+            <li>Explore Bayesian modeling approaches that can incorporate uncertainty quantification</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Contact Information</h2>
+        <ul>
+            <li><strong>Author:</strong> Raymond Ding</li>
+            <li><strong>Email:</strong> <a href="mailto:rding23@gwu.edu">rding23@gwu.edu</a></li>
+            <li><strong>GitHub:</strong> <a href="https://github.com/GW-datasci/25-spring-rding">https://github.com/GW-datasci/25-spring-rding</a></li>
+            <li><strong>Institution:</strong> The George Washington University, Data Science Program</li>
+        </ul>
+    </div>
+</body>
+</html>

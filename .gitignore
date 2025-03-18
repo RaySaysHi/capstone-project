@@ -1,0 +1,22 @@
+# Python virtual environment
+venv/
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Large files
+*.so
+*.so.*
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# OS specific files
+.DS_Store

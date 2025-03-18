@@ -1,0 +1,10 @@
+{
+  "model_name": "Linear Regression",
+  "metrics": {
+    "rmse": 9773.375750036686,
+    "mae": 8104.68355631989,
+    "mape": 1.6209440877287256,
+    "r2": 0.9466513465511686,
+    "directional_accuracy": 85.71428571428571
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "model_performance": {
+    "best_model": "Linear Regression",
+    "best_rmse": 9773.375750036686,
+    "best_r2": 0.9466513465511686,
+    "model_rankings": {
+      "Linear Regression": 9773.375750036686,
+      "Lasso Regression": 25878.667841223836,
+      "ARIMA(1, 1, 1) with 4 exogenous variables": 32999.92145756897,
+      "Ridge Regression": 42435.68101488498,
+      "SARIMA(1, 1, 1)(1, 0, 1, 12)": 78176.0477066341,
+      "ARIMA(1, 1, 1)": 81994.43917298508,
+      "LightGBM": 117894.90896425668,
+      "Gradient Boosting": 119906.21917050857,
+      "Random Forest": 120269.78132973076,
+      "XGBoost": 120571.60815537168
+    }
+  },
+  "key_features": {
+    "top_5_features": [
+      {
+        "Feature": "monthly_payment",
+        "Average_Importance": 0.5294877473280066
+      },
+      {
+        "Feature": "Unemployment_Rate",
+        "Average_Importance": 0.5185987818729219
+      },
+      {
+        "Feature": "Median_Household_Income_lag1",
+        "Average_Importance": 0.5030961618472213
+      },
+      {
+        "Feature": "Median_Household_Income",
+        "Average_Importance": 0.46439131302227704
+      },
+      {
+        "Feature": "payment_to_income",
+        "Average_Importance": 0.4080253482150526
+      }
+    ],
+    "feature_categories": {
+      "economic_indicators": "Strong influence from CPI, unemployment, and household income",
+      "mortgage_conditions": "Interest rates and mortgage rates show significant impact",
+      "temporal_features": "Lagged and seasonal components demonstrate importance of time-based patterns",
+      "derived_metrics": "Affordability metrics like price-to-income are valuable predictors"
+    }
+  },
+  "forecast_insights": {
+    "forecast_period": "July 2024 to June 2025",
+    "projected_annual_growth": NaN,
+    "confidence_interval_width": NaN,
+    "key_growth_drivers": [
+      "Continued economic recovery",
+      "Low housing inventory in DC",
+      "Population changes and migration patterns",
+      "Interest rate environment"
+    ],
+    "risk_factors": [
+      "Potential interest rate changes",
+      "Economic uncertainty",
+      "Housing policy developments",
+      "Supply chain and construction costs"
+    ]
+  },
+  "modeling_insights": {
+    "time_series_properties": "Housing prices show strong temporal dependence and seasonality",
+    "exogenous_variables": "Including economic indicators significantly improves predictive power",
+    "model_complexity": "Linear models surprisingly outperformed more complex approaches, suggesting linear relationships dominant in this domain",
+    "feature_engineering": "Derived features like affordability ratios and lagged variables are crucial for accurate predictions"
+  },
+  "practical_implications": [
+    "Housing affordability will remain a key concern as prices continue to rise",
+    "Economic indicators should be closely monitored for early warning signs of market changes",
+    "Seasonal patterns suggest optimal timing for market entry (buying/selling)",
+    "DC's housing market shows resilience but remains sensitive to interest rate changes"
+  ]
+}
